@@ -5,6 +5,8 @@ import InputComment from "./InputComment";
 import "./style.css";
 import {connect, Provider} from "react-redux";
 import {store} from "./init/store"
+import {addComment, deleteComment} from "./comments/action"
+import {changeAuthor, changeText} from "./form/action"
 
 
 class Widget extends React.Component {
@@ -19,8 +21,8 @@ class Widget extends React.Component {
                 <InputComment
                     name={this.props.form.author}
                     text={this.props.form.text}
-                    changeAuthor={this.props.changeAuthor}
-                    changeText={this.props.changeText}
+                    chAuthor={this.props.chAuthor}
+                    chText={this.props.chText}
                     add={this.props.add}
                 />
             </div>
@@ -39,20 +41,18 @@ function mapDispatchToProps(dispatch) {
     return {
         add: (e) => {
             e.preventDefault();
+
             const comment = {
                 author: store.getState().form.author,
                 text: store.getState().form.text,
                 timestamp: new Date().toLocaleString()
             }
-            dispatch({
-                type: "ADD_COMMENT",
-                payload: comment
-            })
 
+            dispatch(addComment(comment))
         },
-        delete: (i) => dispatch({type: "DELETE_COMMENT", payload: i}),
-        changeAuthor: (e) => dispatch({type: "CHANGE_AUTHOR", payload: e.target.value}),
-        changeText: (e) => dispatch({type: "CHANGE_TEXT", payload: e.target.value}),
+        delete: (i) => dispatch(deleteComment(i)),
+        chAuthor: (e) => dispatch(changeAuthor(e.target.value)),
+        chText: (e) => dispatch(changeText(e.target.value)),
     }
 }
 
