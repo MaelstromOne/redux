@@ -5,7 +5,7 @@ const initialState = {
 
 export const formReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "CLEAR":
+        case "ADD_COMMENT":
             return {
                 author: "",
                 text: ""

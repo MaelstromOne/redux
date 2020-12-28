@@ -1,78 +1,70 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
+import Comment from "./Comment.js";
 import InputComment from "./InputComment";
 import "./style.css";
-import Comments from "./Comments";
+import {connect, Provider} from "react-redux";
 import {store} from "./init/store"
-import {connect, Provider, useDispatch, useSelector} from "react-redux";
 
-function Widget() {
-    const comments = useSelector(state => state.comments);
-    const form = useSelector(state => state.form);
-    const dispatch = useDispatch();
+const COMMENTS = "comments";
 
-    function deleteComment(index) {
-        dispatch({
-            type: "DELETE_COMMENT",
-            payload: index
-        })
+class Widget extends React.Component {
+
+    render() {
+        return (
+            <div className={"fixed-container main"}>
+                <div className={"comments"}>
+                    {this.props.comments.map((comment, index) => {
+                        return <Comment
+                            key={index}
+                            author={comment.author}
+                            text={comment.text}
+                            timestamp={comment.timestamp}
+                            delete={this.props.delete.bind(this, index)}
+                        />
+                    })}
+                </div>
+                <InputComment
+                    name={this.props.form.author}
+                    text={this.props.form.text}
+                    changeAuthor={this.props.changeAuthor}
+                    changeText={this.props.changeText}
+                    add={this.props.add}
+                />
+            </div>
+        )
     }
-
-    const addComment = (event) => {
-        event.preventDefault()
-
-        const comment = {
-            author: form.author,
-            text: form.text,
-            timestamp: new Date().toLocaleString()
-        }
-
-        dispatch({
-            type: "ADD_COMMENT",
-            payload: comment
-        })
-
-        dispatch({
-            type: "CLEAR"
-        })
-    }
-
-    return (
-        <div className="fixed-container main">
-            <Comments
-                comments={comments}
-                delete={deleteComment}
-            />
-            <InputComment
-                author={form.author}
-                text={form.text}
-                dispatch={dispatch}
-                add={addComment}
-            />
-        </div>
-    )
-
 }
 
-// function mapStateToProps(state) {
-//     return {
-//         counter: state.counter1.counter
-//     }
-// }
-//
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         onAdd: () => dispatch(add()),
-//         onSub: () => dispatch(sub()),
-//         onAddNumber: number => dispatch(addNumber(number)),
-//         onAsyncAdd: number => dispatch(asyncAdd(number))
-//     }
-// }
-//
-// Widget = connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(Widget);
+function mapStateToProps(state) {
+    return {
+        comments: state.comments,
+        form: state.form
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        add: (e) => {
+            e.preventDefault();
+            const comment = {
+                author: store.getState().form.author,
+                text: store.getState().form.text,
+                timestamp: new Date().toLocaleString()
+            }
+            dispatch({
+                type: "ADD_COMMENT",
+                payload: comment
+            })
+
+        },
+        delete: (i) => dispatch({type: "DELETE_COMMENT", payload: i}),
+        changeAuthor: (e) => dispatch({type: "CHANGE_AUTHOR", payload: e.target.value}),
+        changeText: (e) => dispatch({type: "CHANGE_TEXT", payload: e.target.value}),
+    }
+}
+
+Widget = connect(mapStateToProps, mapDispatchToProps)(Widget);
 
 ReactDOM.render(
     <Provider store={store}>
