@@ -1,29 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Comment from "./Comment.js";
+import Comments from "./Comments"
 import InputComment from "./InputComment";
 import "./style.css";
 import {connect, Provider} from "react-redux";
 import {store} from "./init/store"
 
-const COMMENTS = "comments";
 
 class Widget extends React.Component {
 
     render() {
         return (
             <div className={"fixed-container main"}>
-                <div className={"comments"}>
-                    {this.props.comments.map((comment, index) => {
-                        return <Comment
-                            key={index}
-                            author={comment.author}
-                            text={comment.text}
-                            timestamp={comment.timestamp}
-                            delete={this.props.delete.bind(this, index)}
-                        />
-                    })}
-                </div>
+                <Comments
+                    comments={this.props.comments}
+                    delete={this.props.delete}
+                />
                 <InputComment
                     name={this.props.form.author}
                     text={this.props.form.text}
