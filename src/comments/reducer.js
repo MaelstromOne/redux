@@ -1,16 +1,3 @@
-// const initialState = [
-//     {
-//         author: "name",
-//         text: "text",
-//         timestamp: new Date().toLocaleString()
-//     },
-//     {
-//         author: "name2",
-//         text: "text2",
-//         timestamp: new Date().toLocaleString()
-//     }
-// ]
-
 const COMMENTS = "comments";
 
 export function save(comments) {
