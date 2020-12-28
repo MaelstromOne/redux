@@ -3,41 +3,38 @@ import ReactDOM from 'react-dom'
 import InputComment from "./InputComment";
 import "./style.css";
 import Comments from "./Comments";
-
-const COMMENTS = "comments";
+import {store} from "./init/store"
+import {connect, Provider, useDispatch, useSelector} from "react-redux";
 
 function Widget() {
-    const [name, setName] = useState("");
-    const [text, setText] = useState("");
-    const [comments, setComments] = useState(load());
-
-    useEffect(() => {
-        save()
-    }, [comments])
-
-    function save() {
-        localStorage.setItem(COMMENTS, JSON.stringify(comments))
-    }
-
-    function load() {
-        return JSON.parse(localStorage.getItem(COMMENTS)) || []
-    }
+    const comments = useSelector(state => state.comments);
+    const form = useSelector(state => state.form);
+    const dispatch = useDispatch();
 
     function deleteComment(index) {
-        setComments([...comments].filter((_, i) => i !== index));
+        dispatch({
+            type: "DELETE_COMMENT",
+            payload: index
+        })
     }
 
     const addComment = (event) => {
         event.preventDefault()
+
         const comment = {
-            author: name,
-            text: text,
+            author: form.author,
+            text: form.text,
             timestamp: new Date().toLocaleString()
         }
-        setComments([...comments, comment]);
 
-        setName("");
-        setText("");
+        dispatch({
+            type: "ADD_COMMENT",
+            payload: comment
+        })
+
+        dispatch({
+            type: "CLEAR"
+        })
     }
 
     return (
@@ -47,10 +44,9 @@ function Widget() {
                 delete={deleteComment}
             />
             <InputComment
-                name={name}
-                text={text}
-                setName={setName}
-                setText={setText}
+                author={form.author}
+                text={form.text}
+                dispatch={dispatch}
                 add={addComment}
             />
         </div>
@@ -58,7 +54,29 @@ function Widget() {
 
 }
 
+// function mapStateToProps(state) {
+//     return {
+//         counter: state.counter1.counter
+//     }
+// }
+//
+// function mapDispatchToProps(dispatch) {
+//     return {
+//         onAdd: () => dispatch(add()),
+//         onSub: () => dispatch(sub()),
+//         onAddNumber: number => dispatch(addNumber(number)),
+//         onAsyncAdd: number => dispatch(asyncAdd(number))
+//     }
+// }
+//
+// Widget = connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(Widget);
+
 ReactDOM.render(
-    <Widget/>,
+    <Provider store={store}>
+        <Widget/>
+    </Provider>,
     document.querySelector('#app')
 )
