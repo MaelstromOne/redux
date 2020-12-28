@@ -31,10 +31,6 @@ function Widget() {
             type: "ADD_COMMENT",
             payload: comment
         })
-
-        dispatch({
-            type: "CLEAR"
-        })
     }
 
     return (
