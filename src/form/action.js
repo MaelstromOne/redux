@@ -1,11 +1,13 @@
-export const clear = {
-    type: "CLEAR"
+export const changeAuthor = (author) => {
+    return {
+        type: "CHANGE_AUTHOR",
+        payload: author
+    }
 }
 
-export const changeAuthor = {
-    type: "CHANGE_AUTHOR"
-}
-
-export const changeText = {
-    type: "CHANGE_TEXT"
+export const changeText = (text) => {
+    return {
+        type: "CHANGE_TEXT",
+        payload: text
+    }
 }
