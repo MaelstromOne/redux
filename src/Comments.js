@@ -1,7 +1,9 @@
 import React from 'react'
 import Comment from "./Comment";
+import {deleteComment} from "./comments/action";
+import {connect} from "react-redux";
 
-export default class Comments extends React.Component {
+class Comments extends React.Component {
     render() {
         return (
             <div className={"comments"}>
@@ -18,3 +20,18 @@ export default class Comments extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        comments: state.comments,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        delete: (i) => dispatch(deleteComment(i)),
+    }
+}
+
+
+export default  connect(mapStateToProps, mapDispatchToProps)(Comments);
