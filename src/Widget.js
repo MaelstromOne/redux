@@ -4,6 +4,8 @@ import InputComment from "./InputComment";
 import "./style.css";
 import Comments from "./Comments";
 import {store} from "./init/store"
+import {addComment, deleteComment} from "./comments/action"
+import {changeAuthor, changeText} from "./form/action"
 import {Provider, useDispatch, useSelector} from "react-redux";
 
 function Widget() {
@@ -11,14 +13,11 @@ function Widget() {
     const form = useSelector(state => state.form);
     const dispatch = useDispatch();
 
-    function deleteComment(index) {
-        dispatch({
-            type: "DELETE_COMMENT",
-            payload: index
-        })
+    function del(index) {
+        dispatch(deleteComment(index))
     }
 
-    const addComment = (event) => {
+    const add = (event) => {
         event.preventDefault()
 
         const comment = {
@@ -27,23 +26,29 @@ function Widget() {
             timestamp: new Date().toLocaleString()
         }
 
-        dispatch({
-            type: "ADD_COMMENT",
-            payload: comment
-        })
+        dispatch(addComment(comment));
+    }
+
+    const chAuthor = (event) => {
+        dispatch(changeAuthor(event.target.value))
+    }
+
+    const chText = (event) => {
+        dispatch(changeText(event.target.value))
     }
 
     return (
         <div className="fixed-container main">
             <Comments
                 comments={comments}
-                delete={deleteComment}
+                del={del}
             />
             <InputComment
                 author={form.author}
                 text={form.text}
-                dispatch={dispatch}
-                add={addComment}
+                chAuthor={chAuthor}
+                chText={chText}
+                add={add}
             />
         </div>
     )

@@ -11,7 +11,7 @@ export default (props) => {
                     author={comment.author}
                     text={comment.text}
                     timestamp={comment.timestamp}
-                    delete={props.delete}
+                    del={props.del}
                 />
             })}
         </div>

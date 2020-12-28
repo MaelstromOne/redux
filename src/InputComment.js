@@ -6,17 +6,9 @@ export default (props) => {
             <fieldset>
                 <legend>Добавить комментарий</legend>
                 <label>Имя</label>
-                <input type="text" name="author" value={props.author} onChange={e => {props.dispatch({
-                    type: "CHANGE_AUTHOR",
-                    payload: e.target.value
-                })
-                }}/>
+                <input type="text" name="author" value={props.author} onChange={props.chAuthor}/>
                 <label>Комментарий</label>
-                <textarea rows="5" cols="45" name="text" value={props.text} onChange={e => {props.dispatch({
-                    type: "CHANGE_TEXT",
-                    payload: e.target.value
-                })
-                }}/>
+                <textarea rows="5" cols="45" name="text" value={props.text} onChange={props.chText}/>
                 <button className="send">Отправить</button>
             </fieldset>
         </form>
