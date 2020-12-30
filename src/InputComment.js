@@ -1,30 +1,25 @@
-import React from 'react'
-import {useDispatch, useSelector} from "react-redux";
-import {changeAuthor, changeText} from "./form/action";
+import React, {useState} from 'react'
+import {useDispatch} from "react-redux";
 import {addComment} from "./comments/action";
 
 export default () => {
-    const form = useSelector(state => state.form);
+    const [author, setAuthor] = useState("");
+    const [text, setText] = useState("");
     const dispatch = useDispatch();
 
     const add = (event) => {
         event.preventDefault()
 
         const comment = {
-            author: form.author,
-            text: form.text,
+            author: author,
+            text: text,
             timestamp: new Date().toLocaleString()
         }
 
         dispatch(addComment(comment));
-    }
 
-    const chAuthor = (event) => {
-        dispatch(changeAuthor(event.target.value))
-    }
-
-    const chText = (event) => {
-        dispatch(changeText(event.target.value))
+        setAuthor("");
+        setText("");
     }
 
     return (
@@ -32,9 +27,9 @@ export default () => {
             <fieldset>
                 <legend>Добавить комментарий</legend>
                 <label>Имя</label>
-                <input type="text" name="author" value={form.author} onChange={chAuthor}/>
+                <input type="text" name="author" value={author} onChange={e => setAuthor(e.target.value)}/>
                 <label>Комментарий</label>
-                <textarea rows="5" cols="45" name="text" value={form.text} onChange={chText}/>
+                <textarea rows="5" cols="45" name="text" value={text} onChange={e => setText(e.target.value)}/>
                 <button className="send">Отправить</button>
             </fieldset>
         </form>
